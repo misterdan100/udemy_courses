@@ -1,5 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    //#region OBSERVADOR DE IMAGENES ASYNCRONAS
+    const imgOptions = {};
+    const imgObserver = new IntersectionObserver((entries, imgObserver) => {
+        entries.forEach( entry => {
+            if(!entry.isIntersecting) return;
+            const img = entry.target
+            let dataImage = img.getAttribute('data-image');
+            img.src = dataImage;
+            imgObserver.unobserve(img)
+        } )
+    }, imgOptions);
+    //#endregion
+
     //#region CONSUMO DE API CON FETCH 
     const fetchPokemons = async (endpoint) => {
         let data;
@@ -72,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
             divitem.innerHTML = `<div> ${orderNumber(item.url)} - ${item.name}</div>`;
             divitem.appendChild(img);
             container.appendChild(divitem);
+            imgObserver.observe(img)
         })
     };
     //#endregion
